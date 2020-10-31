@@ -46,15 +46,3 @@ resource "aws_internet_gateway" "pomelo_production_igw" {
   }
 }
 
-resource "aws_eip" "pomelo_production_ngw_eip" {
-  vpc = true
-}
-
-resource "aws_nat_gateway" "gw" {
-  allocation_id = aws_eip.pomelo_production_ngw_eip.id
-  subnet_id     = aws_subnet.pomelo_production_private_subnet_1.id
-
-  tags = {
-    Name = "pomelo_production_ngw"
-  }
-}
