@@ -70,3 +70,17 @@ resource "aws_route" "pomelo_production_default_rt_default_route" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.pomelo_production_igw.id
 }
+
+# New Route Table and Routes for Private Subnet
+resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
+  vpc_id = aws_vpc.pomelo_production_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.pomelo_production_ngw.id
+  }
+
+  tags = {
+    Name = "pomelo_production_private_subnet_route_table"
+  }
+}
