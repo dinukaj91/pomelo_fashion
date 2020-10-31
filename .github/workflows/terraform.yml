@@ -1,8 +1,6 @@
-name: Git Push Triggered Workflow
-on: [push]
-
-name: Manually Triggered Workflow
+name: Manual and Push Triggered Workflow
 on:
+  push:
   workflow_dispatch:
     inputs:
       name:
