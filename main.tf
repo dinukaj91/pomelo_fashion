@@ -147,6 +147,16 @@ resource "aws_instance" "pomelo_production_website" {
 
   vpc_security_group_ids = [aws_security_group.pomelo_production_generic_firewall.id]
 
+	user_data = << EOF
+		#! /bin/bash
+    sudo apt-get update
+		sudo apt-get install -y nginx
+		sudo systemctl start nginx
+		sudo systemctl enable nginx
+    echo "<h1>Pomelo Production Website</h1>" | sudo tee /var/www/html/index.html
+		echo "<h2>Deployed via Terraform</h2>" | sudo tee /var/www/html/index.html
+	EOF
+
   tags = {
     Name = "pomelo_production_website"
     Application = "website"
