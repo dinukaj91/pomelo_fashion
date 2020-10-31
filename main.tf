@@ -157,6 +157,8 @@ resource "aws_instance" "pomelo_production_website" {
 		echo "<h2>Deployed via Terraform</h2>" | sudo tee /var/www/html/index.html
 	EOF
 
+  user_data = "${file("config_server.sh")}"
+
   tags = {
     Name = "pomelo_production_website"
     Application = "website"
