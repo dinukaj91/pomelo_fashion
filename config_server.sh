@@ -8,23 +8,38 @@ sudo systemctl enable nginx
 echo "<h1>Pomelo Production Website</h1>" >> /var/www/html/index.html
 echo "<h3>Deployed via Terraform</h3>" >> /var/www/html/index.html
 
-cat <<EOT >> cloudwatch_agent_config_file
-[general]
-state_file = /var/awslogs/state/agent-state
- 
-[/var/log/nginx/access.log]
-file = /var/log/nginx/access.log
-log_group_name = nginx_access_log
-log_stream_name = pomelo_website
-datetime_format = %b %d %H:%M:%S
-
-[/var/log/nginx/error.log]
-file = /var/log/nginx/error.log
-log_group_name = nginx_error_log
-log_stream_name = pomelo_website
-datetime_format = %b %d %H:%M:%S
+cat <<EOT >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/cloudwatch_agent_config_file
+{
+  "agent": {
+	"metrics_collection_interval": 10,
+	"logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
+  },
+  "logs": {
+	"logs_collected": {
+	  "files": {
+		"collect_list": [
+		  {
+			"file_path": "/var/log/nginx/access.log",
+			"log_group_name": "nginx_access.log",
+			"timezone": "Local",
+			"log_stream_name": "pomelo_website"
+		  },
+		  {
+			"file_path": "/var/log/nginx/error.log",
+			"log_group_name": "nginx_error.log",
+			"timezone": "Local",
+			"log_stream_name": "pomelo_website"
+		  }
+		]
+	  }
+	},
+	"force_flush_interval" : 15
+  }
+}
 EOT
 
-curl https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py -O
-chmod +x ./awslogs-agent-setup.py
-./awslogs-agent-setup.py -n -r us-west-2 -c cloudwatch_agent_config_file
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+chmod +x ./amazon-cloudwatch-agent.deb
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+systemctl start amazon-cloudwatch-agent
+systemctl enable amazon-cloudwatch-agent
