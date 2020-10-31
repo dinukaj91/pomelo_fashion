@@ -71,6 +71,11 @@ resource "aws_route" "pomelo_production_default_rt_default_route" {
   gateway_id             = aws_internet_gateway.pomelo_production_igw.id
 }
 
+resource "aws_route_table_association" "pomelo_production_public_subnet_1_associate_rt" {
+  subnet_id      = aws_subnet.pomelo_production_public_subnet_1.id
+  route_table_id = aws_vpc.pomelo_production_vpc.default_route_table_id
+}
+
 # New Route Table and Routes for Private Subnet
 resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
   vpc_id = aws_vpc.pomelo_production_vpc.id
@@ -81,6 +86,11 @@ resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
   }
 
   tags = {
-    Name = "pomelo_production_private_subnet_route_table"
+    Name = "pomelo_production_vpc_private_subnet_route_table"
   }
+}
+
+resource "aws_route_table_association" "pomelo_production_private_subnet_1_associate_rt" {
+  subnet_id      = aws_subnet.pomelo_production_private_subnet_1.id
+  route_table_id = aws_vpc.pomelo_production_private_subnet_1.id
 }
