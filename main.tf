@@ -92,5 +92,5 @@ resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
 
 resource "aws_route_table_association" "pomelo_production_private_subnet_1_associate_rt" {
   subnet_id      = aws_subnet.pomelo_production_private_subnet_1.id
-  route_table_id = aws_vpc.pomelo_production_private_subnet_1.id
+  route_table_id = aws_route_table.pomelo_production_private_subnet_route_table.id
 }
