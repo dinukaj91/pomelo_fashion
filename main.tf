@@ -288,4 +288,6 @@ resource "aws_db_instance" "pomelo_production_website_rds" {
   db_subnet_group_name = aws_db_subnet_group.pomelo_production_db_subnet_group.id
 
   vpc_security_group_ids = [aws_security_group.pomelo_production_rds_in.id]
+
+  skip_final_snapshot = true
 }
