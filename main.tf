@@ -130,9 +130,15 @@ resource "aws_security_group" "pomelo_production_generic_firewall" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -216,7 +222,6 @@ resource "aws_iam_instance_profile" "pomelo_production_website_instance_profile"
   role = aws_iam_role.pomelo_production_website_role.name
 }
 
-
 # AWS EC2 Instance for Website
 resource "aws_instance" "pomelo_production_website" {
   ami           = "ami-06e54d05255faf8f6"
@@ -245,3 +250,16 @@ resource "aws_eip_association" "pomelo_production_website_eip_assoc" {
   allocation_id = aws_eip.pomelo_production_website_eip.id
 }
 
+# AWS RDS Instance for Website
+resource "aws_db_instance" "pomelo_production_website_rds" {
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t3.micro"
+  name                 = "pomelo_website"
+  username             = "pomelo_website_user"
+  password             = "verystrongpassword"
+  parameter_group_name = "default.mysql5.7"
+  vpc_security_group_ids = [aws_security_group.pomelo_production_rds_in.id]
+}
