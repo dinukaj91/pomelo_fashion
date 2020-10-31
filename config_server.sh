@@ -28,13 +28,13 @@ cat <<EOT >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/clou
 			"file_path": "/var/log/nginx/access.log",
 			"log_group_name": "nginx_access.log",
 			"timezone": "Local",
-			"log_stream_name": "pomelo_website"
+			"log_stream_name": "pomelo_website_{ip_address}"
 		  },
 		  {
 			"file_path": "/var/log/nginx/error.log",
 			"log_group_name": "nginx_error.log",
 			"timezone": "Local",
-			"log_stream_name": "pomelo_website"
+			"log_stream_name": "pomelo_website_{ip_address}"
 		  }
 		]
 	  }

@@ -102,8 +102,6 @@ resource "aws_key_pair" "pomelo_main_key_pair" {
 }
 
 #Configure ec2 Instance and security groups
-
-
 resource "aws_security_group" "pomelo_production_generic_firewall" {
   name        = "pomelo_production_generic_firewall"
   description = "Generic Firewall Rules"
@@ -165,3 +163,48 @@ resource "aws_eip_association" "pomelo_production_website_eip_assoc" {
   allocation_id = aws_eip.pomelo_production_website_eip.id
 }
 
+#Configure Iam Role\Policy to Send Logs to Cloudwatch
+resource "aws_iam_role_policy" "pomelo_production_website_logging_policy" {
+  name = "pomelo_production_website_logging_policy"
+  role = aws_iam_role.pomelo_production_website_role.id
+
+  policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+    ],
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+    ]
+  }
+ ]
+}
+  EOF
+}
+
+resource "aws_iam_role" "pomelo_production_website_role" {
+  name = "pomelo_production_website_role"
+
+  assume_role_policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "ec2.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+  }
+  EOF
+}
