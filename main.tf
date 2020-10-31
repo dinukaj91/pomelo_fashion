@@ -138,7 +138,7 @@ resource "aws_security_group" "pomelo_production_generic_firewall" {
 }
 
 resource "aws_security_group" "pomelo_production_rds_out" {
-  name        = "pomelo_production_rds_in"
+  name        = "pomelo_production_rds_out"
   description = "Enable MYSQL traffic out from rds_in sg"
   vpc_id      = aws_vpc.pomelo_production_vpc.id
 
