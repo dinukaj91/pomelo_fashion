@@ -1,5 +1,17 @@
-name: Terraform Apply
+name: Git Push Triggered Workflow
 on: [push]
+
+name: Manually Triggered Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Person to greet'
+        required: true
+        default: 'Mona the Octocat'
+      home:
+        description: 'location'
+        required: false
 
 jobs:
   terraform_apply:
