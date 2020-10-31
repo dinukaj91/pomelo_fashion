@@ -161,7 +161,7 @@ resource "aws_security_group" "pomelo_production_rds_out" {
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = [aws_security_group.pomelo_production_rds_in.id]
+    cidr_blocks = [ "10.101.1.0/24" ]
   }
 }
 
