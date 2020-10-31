@@ -1,5 +1,15 @@
-name: Terraform Apply
-on: [push]
+name: Manual and Push Triggered Workflow
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Person to greet'
+        required: true
+        default: 'Mona the Octocat'
+      home:
+        description: 'location'
+        required: false
 
 jobs:
   terraform_apply:
