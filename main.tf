@@ -211,5 +211,5 @@ resource "aws_iam_role" "pomelo_production_website_role" {
 
 resource "aws_iam_instance_profile" "pomelo_production_website_instance_profile" {
   name  = "pomelo_production_website_instance_profile"
-  roles = [ aws_iam_role.pomelo_production_website_role.name ]
+  role = [ aws_iam_role.pomelo_production_website_role.name ]
 }
