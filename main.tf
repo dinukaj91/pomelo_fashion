@@ -38,10 +38,19 @@ resource "aws_subnet" "pomelo_production_private_subnet_1" {
   }
 }
 
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "pomelo_production_igw" {
   vpc_id = aws_vpc.pomelo_production_vpc.id
 
   tags = {
     Name = "pomelo_production_vpc_igw"
+  }
+}
+
+resource "aws_nat_gateway" "gw" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.pomelo_production_private_subnet_1.id
+
+  tags = {
+    Name = "pomelo_production_ngw"
   }
 }
