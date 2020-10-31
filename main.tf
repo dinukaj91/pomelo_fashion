@@ -3,6 +3,14 @@ provider "aws" {
   region = "us-west-2"
 }
 
+terraform {
+  backend "s3" {
+    bucket = "pomelo-production-terraform-state"
+    key    = "terraform.tfstate"
+    region = "us-west-2"
+  }
+}
+
 resource "aws_vpc" "pomelo_production_vpc" {
   cidr_block       = "10.101.0.0/16"
   instance_tenancy = "default"
