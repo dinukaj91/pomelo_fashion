@@ -251,6 +251,15 @@ resource "aws_eip_association" "pomelo_production_website_eip_assoc" {
 }
 
 # AWS RDS Instance for Website
+resource "aws_db_subnet_group" "pomelo_production_db_subnet_group" {
+  name       = "pomelo_production_db_subnet_group"
+  subnet_ids = [aws_subnet.pomelo_production_private_subnet_1.name]
+
+  tags = {
+    Name = "pomelo_production_db_subnet_group"
+  }
+}
+
 resource "aws_db_instance" "pomelo_production_website_rds" {
   allocated_storage    = 20
   storage_type         = "gp2"
@@ -261,5 +270,8 @@ resource "aws_db_instance" "pomelo_production_website_rds" {
   username             = "pomelo_website_user"
   password             = "verystrongpassword"
   parameter_group_name = "default.mysql5.7"
+
+  db_subnet_group_name = aws_db_subnet_group.pomelo_production_db_subnet_group.id
+
   vpc_security_group_ids = [aws_security_group.pomelo_production_rds_in.id]
 }
