@@ -137,20 +137,6 @@ resource "aws_security_group" "pomelo_production_generic_firewall" {
   }
 }
 
-resource "aws_security_group" "pomelo_production_rds_in" {
-  name        = "pomelo_production_rds_in"
-  description = "Enable MYSQL traffic in from rds_out sg"
-  vpc_id      = aws_vpc.pomelo_production_vpc.id
-
-  ingress {
-    description = "mysql traffic in"
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    security_groups = [aws_security_group.pomelo_production_rds_out.id]
-  }
-}
-
 resource "aws_security_group" "pomelo_production_rds_out" {
   name        = "pomelo_production_rds_in"
   description = "Enable MYSQL traffic out from rds_in sg"
@@ -162,6 +148,20 @@ resource "aws_security_group" "pomelo_production_rds_out" {
     to_port     = 3306
     protocol    = "tcp"
     cidr_blocks = [ "10.101.4.0/24" ]
+  }
+}
+
+resource "aws_security_group" "pomelo_production_rds_in" {
+  name        = "pomelo_production_rds_in"
+  description = "Enable MYSQL traffic in from rds_out sg"
+  vpc_id      = aws_vpc.pomelo_production_vpc.id
+
+  ingress {
+    description = "mysql traffic in"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups = [aws_security_group.pomelo_production_rds_out.id]
   }
 }
 
