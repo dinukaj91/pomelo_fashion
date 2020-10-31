@@ -225,7 +225,7 @@ resource "aws_instance" "pomelo_production_website" {
   subnet_id = aws_subnet.pomelo_production_public_subnet_1.id
   iam_instance_profile = aws_iam_instance_profile.pomelo_production_website_instance_profile.name
 
-  vpc_security_group_ids = [aws_security_group.pomelo_production_generic_firewall.id]
+  vpc_security_group_ids = [aws_security_group.pomelo_production_generic_firewall.id, aws_security_group.pomelo_production_rds_out.id]
 
   user_data = "${file("config_server.sh")}"
 
