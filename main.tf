@@ -31,13 +31,22 @@ resource "aws_subnet" "pomelo_production_public_subnet_1" {
   }
 }
 
-# Creating Private Subnet
+# Creating Private Subnet 1
 resource "aws_subnet" "pomelo_production_private_subnet_1" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.4.0/24"
 
   tags = {
     Name = "pomelo_production_private_subnet_1"
+  }
+}
+
+resource "aws_subnet" "pomelo_production_private_subnet_2" {
+  vpc_id     = aws_vpc.pomelo_production_vpc.id
+  cidr_block = "10.101.5.0/24"
+
+  tags = {
+    Name = "pomelo_production_private_subnet_2"
   }
 }
 
@@ -253,7 +262,7 @@ resource "aws_eip_association" "pomelo_production_website_eip_assoc" {
 # AWS RDS Instance for Website
 resource "aws_db_subnet_group" "pomelo_production_db_subnet_group" {
   name       = "pomelo_production_db_subnet_group"
-  subnet_ids = [aws_subnet.pomelo_production_private_subnet_1.id]
+  subnet_ids = [aws_subnet.pomelo_production_private_subnet_1.id, aws_subnet.pomelo_production_private_subnet_2.id]
 
   tags = {
     Name = "pomelo_production_db_subnet_group"
