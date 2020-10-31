@@ -11,6 +11,7 @@ terraform {
   }
 }
 
+# Creating VPC
 resource "aws_vpc" "pomelo_production_vpc" {
   cidr_block       = "10.101.0.0/16"
   instance_tenancy = "default"
@@ -20,6 +21,7 @@ resource "aws_vpc" "pomelo_production_vpc" {
   }
 }
 
+# Creating Public Subnet
 resource "aws_subnet" "pomelo_production_public_subnet_1" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.1.0/24"
@@ -29,6 +31,7 @@ resource "aws_subnet" "pomelo_production_public_subnet_1" {
   }
 }
 
+# Creating Private Subnet
 resource "aws_subnet" "pomelo_production_private_subnet_1" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.4.0/24"
@@ -38,6 +41,7 @@ resource "aws_subnet" "pomelo_production_private_subnet_1" {
   }
 }
 
+# Creating Internet Gateway
 resource "aws_internet_gateway" "pomelo_production_igw" {
   vpc_id = aws_vpc.pomelo_production_vpc.id
 
@@ -46,15 +50,23 @@ resource "aws_internet_gateway" "pomelo_production_igw" {
   }
 }
 
+# Creating Nat gateway
 resource "aws_eip" "pomelo_production_ngw_eip" {
   vpc = true
 }
 
-resource "aws_nat_gateway" "gw" {
+resource "aws_nat_gateway" "pomelo_production_ngw" {
   allocation_id = aws_eip.pomelo_production_ngw_eip.id
   subnet_id     = aws_subnet.pomelo_production_public_subnet_1.id
 
   tags = {
     Name = "pomelo_production_ngw"
   }
+}
+
+# Default Route for Default Route Table
+resource "aws_route" "pomelo_production_default_rt_default_route" {
+  route_table_id         = aws_vpc.pomelo_production_vpc.default_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.pomelo_production_igw.id
 }
