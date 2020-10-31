@@ -94,3 +94,31 @@ resource "aws_route_table_association" "pomelo_production_private_subnet_1_assoc
   subnet_id      = aws_subnet.pomelo_production_private_subnet_1.id
   route_table_id = aws_route_table.pomelo_production_private_subnet_route_table.id
 }
+
+# AWS Key Pair
+resource "aws_key_pair" "pomelo_main_key_pair" {
+  key_name   = "main_key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBJEcdA3PaPfuBF4UEVg3NLZuo1rJv9IU6YauVKjCtAqrSdW3K5H79D0Dk3FNuoG249MrFsJsJdUM4iacADp+bnG57Ot105AyJyv48Dl/P/IRwRc3haZgyeCvfeOvOk7g2BePl09ob02zLni1nVyH3IUVpSy13bH+QEvQzbJW73OTvh1NfZ0iRk5Iv5tx9vLIMavRu9aNmDcwm82dwjkkreuEAuJM4SUbVRxKyZZ5eSxr24asBWWirE38AV9X7YKPV24li9111hzHBkc5G8JTbXOmw/Qud24OyYAW0Tbn0FE2cDtFeYNotcNvXJLgZSIXJfrPMwGIo27h7ij3InddjDa++Dvqk4/MGf/2sXLf1hKy5IXH5G8WngH7y5bahJV395TAB3snk7xB/1wkNqlXAkRcVw+277xWioWrQBgXH2jXhrZ8nTLgTlbFWP76+nEpw4HB1IhyhE9KjfKmqACerX5Xke3LCl7Y+gU0OBYOtI5k9IjMeKB1WdKLbFDhEGd8= root@Dinukajcom"
+}
+
+#Configure ec2 Instance 
+resource "aws_instance" "pomelo_production_website" {
+  ami           = "ami-06e54d05255faf8f6"
+  instance_type = "t3.micro"
+  key_name = aws_key_pair.pomelo_main_key_pair.id
+  subnet_id = aws_subnet.pomelo_production_public_subnet_1.id
+
+  tags = {
+    Application = "pomelo_production_website"
+    Environment = "production"
+  }
+}
+
+resource "aws_eip" "pomelo_production_website_eip" {
+  vpc = true
+}
+
+resource "aws_eip_association" "pomelo_production_website_eip_assoc" {
+  instance_id   = aws_instance.pomelo_production_website.id
+  allocation_id = aws_eip.pomelo_production_website_eip.id
+}
