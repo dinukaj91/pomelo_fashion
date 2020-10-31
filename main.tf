@@ -274,7 +274,7 @@ resource "aws_db_subnet_group" "pomelo_production_db_subnet_group" {
 }
 
 resource "aws_db_instance" "pomelo_production_website_rds" {
-  identifier           = "pomelo_production_website_rds"
+  identifier           = "production-mysql-57-pomelo-website"
   allocated_storage    = 20
   storage_type         = "gp2"
   engine               = "mysql"
