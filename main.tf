@@ -37,3 +37,11 @@ resource "aws_subnet" "pomelo_production_private_subnet_1" {
     Name = "pomelo_production_private_subnet_1"
   }
 }
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.pomelo_production_vpc.id
+
+  tags = {
+    Name = "pomelo_production_vpc_igw"
+  }
+}
