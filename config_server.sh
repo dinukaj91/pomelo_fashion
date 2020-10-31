@@ -8,6 +8,12 @@ sudo systemctl enable nginx
 echo "<h1>Pomelo Production Website</h1>" >> /var/www/html/index.html
 echo "<h3>Deployed via Terraform</h3>" >> /var/www/html/index.html
 
+
+
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+chmod +x ./amazon-cloudwatch-agent.deb
+sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
+
 cat <<EOT >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/cloudwatch_agent_config_file
 {
   "agent": {
@@ -38,8 +44,5 @@ cat <<EOT >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/clou
 }
 EOT
 
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
-chmod +x ./amazon-cloudwatch-agent.deb
-sudo dpkg -i -E ./amazon-cloudwatch-agent.deb
 systemctl start amazon-cloudwatch-agent
 systemctl enable amazon-cloudwatch-agent
