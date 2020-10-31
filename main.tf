@@ -25,6 +25,7 @@ resource "aws_vpc" "pomelo_production_vpc" {
 resource "aws_subnet" "pomelo_production_public_subnet_1" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.1.0/24"
+  availability_zone  = "us-west-2a"
 
   tags = {
     Name = "pomelo_production_public_subnet_1"
@@ -35,6 +36,8 @@ resource "aws_subnet" "pomelo_production_public_subnet_1" {
 resource "aws_subnet" "pomelo_production_private_subnet_1" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.4.0/24"
+  availability_zone  = "us-west-2a"
+
 
   tags = {
     Name = "pomelo_production_private_subnet_1"
@@ -44,6 +47,7 @@ resource "aws_subnet" "pomelo_production_private_subnet_1" {
 resource "aws_subnet" "pomelo_production_private_subnet_2" {
   vpc_id     = aws_vpc.pomelo_production_vpc.id
   cidr_block = "10.101.5.0/24"
+  availability_zone  = "us-west-2b"
 
   tags = {
     Name = "pomelo_production_private_subnet_2"
