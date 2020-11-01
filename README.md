@@ -8,17 +8,17 @@ Before triggering a deployment an s3 bucket needs to be created with the name po
 
 After this configuration is finished a github action can be triggered with either a git push or a manual run on the git hub dashboard.
 
-* Additional non-default VPC with internet gateway and route table
+* Additional non-default VPC with internet gateway and route table:
     The Terraform code has the configuration to create a non default VPC together with an internet gateway, a NAT gateway and two route tables 
-* Private and Public Subnets
+* Private and Public Subnets:
     There is a public subnet for the publicly accessible website and two private subnets configured with its own route table for the database instance.
-* SSH Key Setup
+* SSH Key Setup:
     SSH keys are setup with Terraform as well and is installed in the web server
-* Virtual Compute instances that run a web service
+* Virtual Compute instances that run a web service:
     AN EC2 instance is configured with terraform in the public subnet with nginx and a sample html website which is configured during boot with the help of a userdata file
-* Virtual Compute instances that run a database, bonus points for leveraging an external source such as RDS
+* Virtual Compute instances that run a database, bonus points for leveraging an external source such as RDS:
     RDS is leveraged for the database and is deployed with the terraform config
-* Render a simple website that shows information being either pulled out of the data layer or from some 3rd party API
+* Render a simple website that shows information being either pulled out of the data layer or from some 3rd party API:
     A simple html website is configured which can be accessed publicly
-* Logging enabled to a central place
+* Logging enabled to a central place:
     Cloudwatch agent is configured when the ec2 instance is deployed to send the nginx access/error logs to cloudwatch logs to centralize logging. Proper Iam roles are also configured for authentication with cloudwatch
