@@ -89,7 +89,7 @@ resource "aws_route_table_association" "pomelo_production_public_subnet_1_associ
   route_table_id = aws_vpc.pomelo_production_vpc.default_route_table_id
 }
 
-# New Route Table and Routes for Private Subnet
+# New Route Table and Routes for Private Subnets
 resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
   vpc_id = aws_vpc.pomelo_production_vpc.id
 
@@ -105,6 +105,11 @@ resource "aws_route_table" "pomelo_production_private_subnet_route_table" {
 
 resource "aws_route_table_association" "pomelo_production_private_subnet_1_associate_rt" {
   subnet_id      = aws_subnet.pomelo_production_private_subnet_1.id
+  route_table_id = aws_route_table.pomelo_production_private_subnet_route_table.id
+}
+
+resource "aws_route_table_association" "pomelo_production_private_subnet_2_associate_rt" {
+  subnet_id      = aws_subnet.pomelo_production_private_subnet_2.id
   route_table_id = aws_route_table.pomelo_production_private_subnet_route_table.id
 }
 
@@ -141,7 +146,6 @@ resource "aws_security_group" "pomelo_production_generic_firewall" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 80
     to_port     = 80
